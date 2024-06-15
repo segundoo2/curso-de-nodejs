@@ -1,0 +1,12 @@
+{
+  "name": "aprendendo_node",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node --watch index.js"
+  },
+  "author": "Edilson Segundo",
+  "license": "ISC",
+  "description": ""
+}
