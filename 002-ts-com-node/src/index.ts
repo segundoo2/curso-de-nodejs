@@ -1,2 +1,2 @@
 
-console.log("funcionou");
+export const nome = "Edilson Segundo";
