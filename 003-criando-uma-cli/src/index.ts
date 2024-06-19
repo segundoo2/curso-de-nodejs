@@ -4,6 +4,8 @@ import inquirer from 'inquirer';
 import { questions } from 'questions';
 // interface
 import { IAnswers } from 'interface/answers.interface';
+//controller
+import { GenFile } from 'controller/genaration.controller';
 
 
 
@@ -11,7 +13,7 @@ import { IAnswers } from 'interface/answers.interface';
 class init {
     constructor() {
         inquirer.prompt(questions).then((answers: IAnswers) => {
-            console.log(answers);
+            GenFile.gen(answers);
         });
     }
 }
