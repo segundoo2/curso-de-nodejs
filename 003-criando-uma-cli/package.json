@@ -11,7 +11,11 @@
     "test": "jest --no-cache --watch-all --coverage",
     "test:ci": "jest --no-cache --coverage"
   },
-  "author": "",
+  "bin": {
+    "vfull": "./dist/index.js"
+  },
+
+  "author": "Edilson Segundo",
   "license": "ISC",
   "description": "",
   "devDependencies": {
