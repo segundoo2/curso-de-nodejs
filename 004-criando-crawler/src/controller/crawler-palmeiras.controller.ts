@@ -1,14 +1,10 @@
-import puppeteer from "puppeteer";
+import { startPupperteerService } from "services/start-puppeteer.service";
 
 export class CrawlerPalmeirasController {
     
     constructor() {}
     
     public async init() {
-        const browser = await puppeteer.launch({ headless: false });
-        const page = await browser.newPage();
-
-        await page.goto( 'https://www.palmeiras.com.br/central-de-midia/noticias/' );
-
+        startPupperteerService.start('https://www.palmeiras.com.br/central-de-midia/noticias/');
     }
 }
