@@ -12,7 +12,7 @@
     "test:ci": "jest --no-cache --coverage"
   },
   "bin": {
-    "vfull": "./dist/index.js"
+    "nodets": "./dist/index.js"
   },
 
   "author": "Edilson Segundo",
