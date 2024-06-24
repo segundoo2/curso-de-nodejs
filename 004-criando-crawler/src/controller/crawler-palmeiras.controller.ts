@@ -3,6 +3,7 @@ import puppeteer from "puppeteer";
 export class CrawlerPalmeirasController {
     
     constructor() {}
+    
     public async init() {
         const browser = await puppeteer.launch({ headless: false });
         const page = await browser.newPage();
