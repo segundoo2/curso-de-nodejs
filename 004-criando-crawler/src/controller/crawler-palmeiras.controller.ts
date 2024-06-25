@@ -5,16 +5,39 @@ export class CrawlerPalmeirasController {
     
     public async init() {
         try {
-           const page = await startPupperteerService.start(
+            const page = await startPupperteerService.start(
             'https://www.palmeiras.com.br/central-de-midia/noticias/');
 
             const selector = '.central-de-midia-container  .items-central';
             await page.waitForSelector(selector);
 
             const nodes = await page.$$(selector);
+            const payload: Array<{link: string, titulo: string, data:string}> = []
+            for( const node of nodes) {
+                //Link, título, data
+                const link = await page.evaluate((el: Element) => {
+                    return el.querySelector('a')?.getAttribute('href');
+                }, node)
+                
+                const titulo = await page.evaluate((el: Element) => {
+                    return el.querySelector('a .items-central-txt h4')?.textContent;
+                }, node);
 
-            console.log(nodes);
+                const data = await page.evaluate((el: Element) => {
+                    return el.querySelector('a .items-central-date')?.textContent;
+                }, node)
 
+                if(!link || !titulo || !data)
+                    throw new Error("Esses itens não são válidos");
+                payload.push({
+                    link,
+                    titulo,
+                    data,
+                });
+            }
+            
+            console.log(payload)
+            page.close();
         } catch (error) {
             console.log(error);
         }
