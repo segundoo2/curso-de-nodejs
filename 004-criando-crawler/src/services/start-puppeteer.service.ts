@@ -1,18 +1,23 @@
-import puppeteer from "puppeteer";
+/* eslint-disable no-async-promise-executor */
+import puppeteer, { Page } from "puppeteer";
 
 class StartPupperteerService {
-    constructor() {}
+    constructor() { }
 
-    public async start(url: string) {
-        const browser = await puppeteer.launch({ headless: false });
-        const page = await browser.newPage();
+    public start(url: string): Promise<Page> {
 
-        await page.goto(url);
+        return new Promise(async (resolve, reject) => {
+            const browser = await puppeteer.launch({ headless: false });
+            const page = await browser.newPage();
+            const allPages = await browser.pages();
+            allPages[0].close();
 
-        if(!page) return 'Configuração não responde!'
+            await page.goto(url);
 
-        return page;
+            if (!page) return reject('Configuração não responde!');
+
+            return resolve(page);
+        })
     }
 }
-
-export const startPupperteerService = new StartPupperteerService();
+    export const startPupperteerService = new StartPupperteerService();
