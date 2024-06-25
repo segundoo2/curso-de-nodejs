@@ -27,8 +27,11 @@ export class CrawlerCorinthiansController {
                 }, node);
                 // data
                 const data = await page.evaluate((el: Element) => {
-                    return el.querySelector('.ct-news-list-item-content a p')?.innerHTML.replace(/\n/g, '').replace(/<strong>.*?<\/strong>/g, '').replace(/\-/g, '').trim();
+                    return el.querySelector('.ct-news-list-item-content a p')?.innerHTML.replace(/\n/g, '').replace(/<strong>.*?<\/strong>/g, '').replace(/-/g, '').trim();
                 }, node)
+                
+                if(!link || !titulo || !data)
+                    throw new Error("Esses itens não são válidos");
                 payload.push({
                     link,
                     titulo,
