@@ -1,3 +1,6 @@
+import { IFileGenerator } from "interface/file-generation.interface";
+
+//interface
 import { startPupperteerService } from "services/start-puppeteer.service";
 
 export class CrawlerPalmeirasController {
@@ -12,7 +15,7 @@ export class CrawlerPalmeirasController {
             await page.waitForSelector(selector);
 
             const nodes = await page.$$(selector);
-            const payload: Array<{link: string, titulo: string, data:string}> = []
+            const payload: Array< IFileGenerator > = []
             for( const node of nodes) {
                 //Link, título, data
                 const link = await page.evaluate((el: Element) => {
@@ -36,7 +39,7 @@ export class CrawlerPalmeirasController {
                 });
             }
             
-            console.log(payload)
+            startPupperteerService.fileGenerator(payload, '_Palmeiras');
             page.close();
         } catch (error) {
             console.log(error);

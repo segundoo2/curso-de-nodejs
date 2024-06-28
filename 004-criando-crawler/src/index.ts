@@ -7,7 +7,7 @@ class Init {
   }
 //recebe os contrellers
   private _init() {
-    //new CrawlerPalmeirasController().init();
+    new CrawlerPalmeirasController().init();
     new CrawlerCorinthiansController().init();
     console.log("Inicializado com sucesso");
 

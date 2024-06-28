@@ -1,5 +1,8 @@
 import { startPupperteerService } from "services/start-puppeteer.service";
 
+//interface
+import { IFileGenerator } from "interface/file-generation.interface";
+
 export class CrawlerCorinthiansController {
     constructor(){}
 
@@ -13,7 +16,8 @@ export class CrawlerCorinthiansController {
             await page.waitForSelector(selector);
 
             const nodes = await page.$$(selector);
-            const payload: Array<{link: string, titulo: string, data:string}> = []
+            const payload: Array< IFileGenerator > = []
+            
             for (const node of nodes) {
                 //link, titulo, data
                 
@@ -39,7 +43,7 @@ export class CrawlerCorinthiansController {
                 })
             }
 
-            console.log(payload);
+            startPupperteerService.fileGenerator(payload, '_Corinthians');
             page.close();
         } catch (error) {
             console.log(error);
