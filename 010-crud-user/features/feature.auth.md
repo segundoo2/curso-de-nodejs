@@ -22,6 +22,6 @@
 ---- Não pode editar outro usuário --ok
  
 -- Delete
----- Autorização: só pode acessar a rota Logado
----- Não pode deletar outro usuário
+---- Autorização: só pode acessar a rota Logado --ok
+---- Não pode deletar outro usuário --ok
 ```
