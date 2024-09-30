@@ -1,9 +1,8 @@
-import { EStatusErrors } from "enum/status-errors.enum";
-
-
-//enum
-import { Ezod } from "enum/zod.enum";
+import { Response, Request } from "express";
 import { z } from "zod";
+//enum
+import { EStatusErrors } from "enum/status-errors.enum";
+import { Ezod } from "enum/zod.enum";
 
 class ResetPasswordController {
     public async validateUser(req: Request, res: Response) {
@@ -35,9 +34,9 @@ class ResetPasswordController {
         }
     }
 
-    public async validateSecurityCode(req: Request, res: Response) {}
+    // public async validateSecurityCode(req: Request, res: Response) {}
     
-    public async ResetPassword(req: Request, res: Response) {}
+    // public async resetPassword(req: Request, res: Response) {}
 }
 
 export const resetPasswordController = new ResetPasswordController();

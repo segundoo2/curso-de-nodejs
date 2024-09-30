@@ -16,6 +16,7 @@ router.post(
 
 router.patch(
     `${baseUrl}`, 
-    resetPasswordController.ResetPassword
+    resetPasswordController.resetPassword
 );
+
 export const resetPasswordRouter = router;

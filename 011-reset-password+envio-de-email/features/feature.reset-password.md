@@ -1,12 +1,12 @@
     ```
     > Feature Reset Password
-    -- Model ResetPasswordSecret ( id, secret, user relation, userId relation )
-    -- Model User ( relation ResetPasswordSecret )
+    -- Model ResetPasswordSecret ( id, secret, user relation, userId relation ) --ok
+    -- Model User ( relation ResetPasswordSecret ) --ok
      
     -- Rota Validate User
-    --- Validar os dados do usuários como: email
-    --- Verificar se este email existe no banco de dados
-    --- Gerar código de segurança com 6 digitos numéricos
+    --- Validar os dados do usuários como: email --ok
+    --- Verificar se este email existe no banco de dados --ok
+    --- Gerar código de segurança com 6 digitos numéricos --ok
     --- Salvar esse código no ResetPasswordSecret relacionando com o usuário 1 para 1
     --- Enviar o código para o email do usuário
     --- Retornar o código gerado e email enviado
