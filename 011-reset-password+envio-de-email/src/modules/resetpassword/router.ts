@@ -9,14 +9,14 @@ router.post(
     `${baseUrl}`, 
     resetPasswordController.validateUser
 );
-router.post(
-    `${baseUrl}/validate`, 
-    resetPasswordController.validateSecurityCode
-);
+// router.post(
+//     `${baseUrl}/validate`, 
+//     resetPasswordController.validateSecurityCode
+// );
 
-router.patch(
-    `${baseUrl}`, 
-    resetPasswordController.resetPassword
-);
+// router.patch(
+//     `${baseUrl}`, 
+//     resetPasswordController.resetPassword
+// );
 
 export const resetPasswordRouter = router;

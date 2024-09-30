@@ -3,6 +3,7 @@ import { z } from "zod";
 //enum
 import { EStatusErrors } from "enum/status-errors.enum";
 import { Ezod } from "enum/zod.enum";
+import { resetPasswordService } from "../service/reset-password-service";
 
 class ResetPasswordController {
     public async validateUser(req: Request, res: Response) {
@@ -24,7 +25,7 @@ class ResetPasswordController {
         try {
             return res.json({
                 message: 'Código enviado para o email.',
-                data: await resetPasswordController.validateUser 
+                data: await resetPasswordService.validateUser(email) 
             });
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (err: any) {
