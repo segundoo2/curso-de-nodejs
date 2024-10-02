@@ -1,5 +1,6 @@
 import { prismaConnect } from "prisma.conn";
 import { UtilsSendMail } from "../utils/send-mail-utils";
+import bcrypt from "bcrypt";
 
 //enum
 import { EStatusErrors } from "enum/status-errors.enum";
@@ -38,8 +39,69 @@ class ResetPasswordService {
         UtilsSendMail.send(email, findUser.resetPasswordSecret.secret);
         return { email, secret: findUser.resetPasswordSecret.secret };
     }
-    public async validateSecurityCode() {}
-    public async ResetPassword() {}
+    public async validateSecurityCode(email:string, secret: number) {
+        const findUser = await prismaConnect.user.findUnique({
+            where: {
+                email
+            },
+            include: {
+                resetPasswordSecret: true
+            }
+        });
+
+        if(
+            !findUser ||
+            !findUser.resetPasswordSecret ||
+            findUser.resetPasswordSecret.secret !== secret
+        ) {
+            throw new Error(EStatusErrors.E404);
+        }
+
+        return { email, secret };
+    }
+    public async ResetPassword(
+        email:string,
+        secret: number,
+        newPassword: string
+    ) {
+        const findUser = await prismaConnect.user.findUnique({
+            where: {
+                email
+            },
+            include: {
+                resetPasswordSecret: true
+            }
+        });
+        if(
+            !findUser ||
+            !findUser.resetPasswordSecret ||
+            findUser.resetPasswordSecret.secret !== secret
+        ) {
+            throw new Error(EStatusErrors.E404);
+        }
+        
+        const update = await prismaConnect.user.update({
+            where: {
+                email
+            },
+            data: {
+                password: bcrypt.hashSync(newPassword, 6)
+            },
+            select: {
+                name: true,
+                email: true
+            }
+        });
+
+        await prismaConnect.resetPasswordSecret.delete({
+            where: {
+                userId: findUser.id
+            }
+
+        });
+        
+        return update;
+    }
 }
 
 export const resetPasswordService = new ResetPasswordService();

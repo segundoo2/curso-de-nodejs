@@ -7,9 +7,9 @@
     --- Validar os dados do usuários como: email --ok
     --- Verificar se este email existe no banco de dados --ok
     --- Gerar código de segurança com 6 digitos numéricos --ok
-    --- Salvar esse código no ResetPasswordSecret relacionando com o usuário 1 para 1
-    --- Enviar o código para o email do usuário
-    --- Retornar o código gerado e email enviado
+    --- Salvar esse código no ResetPasswordSecret relacionando com o usuário 1 para 1 --ok
+    --- Enviar o código para o email do usuário --ok
+    --- Retornar o código gerado e email enviado --ok
      
     -- Rota Validate Security Code
     --- Validar os dados do usuários como: email e código gerado
