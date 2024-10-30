@@ -71,7 +71,25 @@ class UserClientController {
         }
     }
     
-    public async listAll(req: Request, res: Response) {}
+    public async listAll(req: Request, res: Response) {
+        const tokenUserId = req.tokenUserId;
+        let page = Number(req.query.page);
+
+        if (!page || page <= 0 || isNaN(page)) {
+            page = 1;
+        }
+
+        try {
+            return res.json({
+                message: ECrud.READ,
+                data: await userClientService.listAll(tokenUserId, page)
+            })
+        } catch (err: any) {
+            return res.status(404).json({
+                error: err.message
+            })
+        }
+    }
     
     public async update(req: Request, res: Response) {}
     

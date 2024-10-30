@@ -52,7 +52,43 @@ class UserClientService {
         return findUserClient;
      }
     
-     public async listAll() {}
+     public async listAll(tokenUserId:string, page: number) {
+        const pageSize = 11;
+        const skip = (page - 1) * pageSize;
+
+        const findUser = await prismaConnect.user.findMany({
+            where: {
+                id: tokenUserId,
+            },
+
+            include: {
+                userClient: {
+                    skip,
+                    take: pageSize
+                }
+            }
+        });
+
+        if (!findUser) {
+            throw new Error(EStatusErrors.E404);
+        }
+
+        const totalCount = await prismaConnect.userClient.count({
+            where: {
+                userId: tokenUserId,
+            },
+        });
+
+        const totalPages = Math.ceil(totalCount / pageSize);
+        
+        return {
+            page,
+            pageSize,
+            totalCount,
+            totalPages,
+            client: findUser[0].userClient,
+        }
+     }
     
      public async update() {}
     
