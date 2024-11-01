@@ -37,7 +37,7 @@ model UserClient {
   id String @id @default(uuid())
   name String
   email String?
-  phone Int?
+  phone String?
   createdAt DateTime @default(now())
   updateAt DateTime @updatedAt
 
