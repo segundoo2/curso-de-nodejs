@@ -1,13 +1,159 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import moment from "moment";
+import { prismaConnect } from "prisma.conn";
+
+//enum
+import { EStatusErrors } from "enum/status-errors.enum";
+import { UtilsFileUsers } from 'utils/files-utils';
+
 class UserClientFileService {
-    public async create() {}
+    public async create(
+        paramsId: string,
+        tokenUserId: string,
+        name: string,
+        date: Date,
+        description: string,
+        file: string
+    ) {
+        const findUser = await prismaConnect.userClient.findUnique({
+            where: {
+                id: paramsId
+            },
 
-    public async read() {}
+        })
+        
+        if(!findUser) {
+            throw new Error(EStatusErrors.E404);
+        }
 
-    public async listAll() {}
+        const create = await prismaConnect.userClientFiles.create({
+            data: {
+                name,
+                date,
+                file,
+                description,
+                userId: tokenUserId,
+                userClientId: paramsId
+            }
+        });
 
-    public async update() {}
+        return create;
+    }
 
-    public async delete() {}
+    public async read(paramsId: string, tokenUserId: string) {
+        const findUserClient = prismaConnect.userClientFiles.findFirst({
+            where: {
+                id: paramsId,
+                userId: tokenUserId
+            },
+            include: {
+                userClient: {}
+            }
+        });
+
+        if(!findUserClient){
+            throw new Error(EStatusErrors.E404);
+        }
+
+        return findUserClient;
+    }
+
+    public async listAll(
+        paramsId: string, 
+        paramsYear: string, 
+        tokenUserId: string
+    ) {
+        const startDate = moment(`${paramsYear}`).startOf('year').format();
+        const endDate = moment(`${paramsYear}`).endOf('year').format();
+
+        const findAll = await prismaConnect.userClientFiles.findMany({
+            where: {
+                userClientId: paramsId,
+                userId: tokenUserId,
+                date: {
+                    gt: startDate,
+                    lt: endDate
+                }
+            }
+        });
+
+        if(!findAll) {
+            throw new Error(EStatusErrors.E404);
+        }
+
+        return findAll;
+    }
+
+    public async update(
+        paramsId: string,
+        tokenUserId: string,
+        id: string,
+        name: string,
+        date: Date,
+        description: string,
+        file: string
+    ) {
+        const find = await prismaConnect.userClientFiles.findFirst({
+            where: {
+                id,
+                userClientId: paramsId,
+                userId: tokenUserId
+            }
+        });
+
+        if(!find) {
+            throw new Error(EStatusErrors.E404)
+        }
+
+        const update = await prismaConnect.userClientFiles.update({
+            where: {
+                id,
+                userClientId: paramsId,
+                userId: tokenUserId
+            },
+            data: {
+                name,
+                date,
+                description,
+                file
+            }
+        });
+
+        const fileUrl = ['assets', 'files', tokenUserId, paramsId];
+        if(fs.existsSync(path.resolve(...fileUrl))){
+            fs.rmSync(path.resolve(...fileUrl, find.file));
+        }
+
+        return update;
+    }
+
+    public async delete(paramsId: string, tokenUserId: string) {
+        const find = await prismaConnect.userClientFiles.findFirst({
+            where: {
+                id: paramsId,
+                userId: tokenUserId
+            }
+        });
+
+        if(!find) {
+            throw new Error(EStatusErrors.E404);
+        }
+
+        const deleteUserClienteFile = await prismaConnect.userClientFiles.delete({
+            where: {
+                id: paramsId,
+                userId: tokenUserId
+            }
+        });
+
+        UtilsFileUsers.deleteFolderUser([
+            deleteUserClienteFile.userId,
+            deleteUserClienteFile.userClientId,
+            deleteUserClienteFile.file
+        ]);
+        return deleteUserClienteFile;
+    }
 
 }
 
