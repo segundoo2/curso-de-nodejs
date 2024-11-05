@@ -6,6 +6,7 @@ import { prismaConnect } from "prisma.conn";
 //enum
 import { EStatusErrors } from "enum/status-errors.enum";
 import { UtilsFileUsers } from 'utils/files-utils';
+import { object } from 'zod';
 
 class UserClientFileService {
     public async create(
@@ -82,7 +83,30 @@ class UserClientFileService {
             throw new Error(EStatusErrors.E404);
         }
 
-        return findAll;
+        const monthRecords: Array<number> = [];
+        const monthCounts: any = {};
+
+        findAll.forEach((record) => {
+            const month = record.date.getMonth();
+            monthRecords.push(month);
+        });
+
+        monthRecords.find((month) => {
+            if(monthCounts[month]){
+                return monthCounts[month]++;
+            }
+
+            return (monthCounts[month] = 1);
+        });
+
+        const count = Object.entries(monthCounts).map(([month, total]) => {
+            return {
+                month: Number(month) + 1,
+                total
+            }
+        })
+
+        return { count, results: findAll };
     }
 
     public async update(

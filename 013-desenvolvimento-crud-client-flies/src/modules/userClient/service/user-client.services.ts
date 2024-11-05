@@ -5,6 +5,7 @@ import { EStatusErrors } from "enum/status-errors.enum";
 
 //utils
 import { UtilsFileUsers } from "utils/files-utils";
+import { record } from "zod";
 
 class UserClientService {
     public async create(
@@ -42,6 +43,13 @@ class UserClientService {
             where: {
                 id: paramsId,
                 userId: tokenUserId
+            },
+            include: {
+                userClientFiles: {
+                    select: {
+                        date: true
+                    }
+                }
             }
         });
 
@@ -49,7 +57,34 @@ class UserClientService {
             throw new Error(EStatusErrors.E404);
         }
 
-        return findUserClient;
+        // eslint-disable-next-line prefer-const
+        let yearRecords: Array<number> = [];
+        let yearcounts: any = {};
+
+        findUserClient.userClientFiles.forEach((record) => {
+            const year = record.date.getFullYear();
+            yearRecords.push(year);
+        });
+
+        yearRecords.forEach((year) => {
+            if(yearcounts[year]){
+                return yearcounts[year]++;
+            }
+
+            yearcounts[year] = 1
+        });
+
+        const userClientParse = JSON.parse(JSON.stringify(findUserClient));
+        delete userClientParse.userClientFiles
+
+        const count = Object.entries(yearcounts).map(([year, total]) => {
+            return {
+                year,
+                total
+            }
+        })
+
+        return { count, ...userClientParse };
      }
     
      public async listAll(tokenUserId:string, page: number, search: string | undefined) {
