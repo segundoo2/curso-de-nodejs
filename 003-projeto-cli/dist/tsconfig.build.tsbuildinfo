@@ -1,0 +1,1 @@
+{"root":["../src/index.ts","../src/questions.ts","../src/controller/generate.controller.ts","../src/enum/choices-boilerplate.enum.ts","../src/enum/errors.enum.ts","../src/enum/git-name.enum.ts","../src/interface/answers.interface.ts"],"errors":true,"version":"5.7.2"}
